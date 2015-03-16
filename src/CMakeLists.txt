@@ -18,6 +18,47 @@ add_definitions(-std=c++11 -pthread)
 
 set(CMAKE_EXE_LINKER_FLAGS "-pthread")
 
+# ==== boost ====
+if (NOT DEFINED     BOOST_ROOT        AND
+    NOT DEFINED ENV{BOOST_ROOT}       AND
+    NOT DEFINED     BOOST_INCLUDEDIR  AND
+    NOT DEFINED ENV{BOOST_INCLUDEDIR} AND
+    NOT DEFINED     BOOST_LIBRARYDIR  AND
+    NOT DEFINED ENV{BOOST_LIBRARYDIR})
+    if (APPLE)
+        set(BOOST_ROOT "/Developer/boost/")
+    elseif (WIN32)
+        set(BOOST_INCLUDEDIR "C:/local/boost_1_55_0")
+        set(BOOST_LIBRARYDIR "C:/local/boost_1_55_0/lib32-msvc-10.0")
+    elseif (UNIX)
+        set(BOOST_INCLUDEDIR "/opt/boost/include")
+        set(BOOST_LIBRARYDIR "/opt/boost/lib")
+    endif()
+endif()
+if (APPLE OR WIN32)
+    set(Boost_USE_STATIC_LIBS TRUE)
+endif()
+
+find_package(Boost COMPONENTS 
+    program_options
+    thread 
+    system
+    chrono
+    date_time
+    REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
+target_link_libraries(${MAIN} ${Boost_LIBRARIES})
+
+set(CONFIGURED_ONCE TRUE CACHE INTERNAL
+    "A flag showing that CMake has configured at least once.")
+
+# for boost testing ONLY
+add_executable(boosttest boosttest.cpp)
+target_link_libraries(boosttest ${Boost_LIBRARIES})
+
+
 # ==== more libs ====
 option (USE_MYLIB "Use my optional lib" OFF)
 
