@@ -4,6 +4,7 @@
  */
 #include "mythreads.h"
 #include "deadlock.h"
+#include <boost/thread.hpp>
 using namespace std;
 
 void hello(int i)
@@ -24,4 +25,7 @@ int main(int argc, char **argv)
         for_each(thvec.begin(), thvec.end(), mem_fn(&thread::join));
         cout << "hardware=" <<  thread::hardware_concurrency() << endl;
     }
+
+    boost::thread ttt(hello, 199);
+    ttt.join();
 }

@@ -43,28 +43,24 @@ endif()
 
 find_package(Boost COMPONENTS 
     program_options
-    REQUIRED)
-
-# SYSTEM arg tells compiler that the path contains system files. Compiler will thus ignore warning. 
-include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIR})
-# NOTE: if link thread, then -pthread will be overwritten!!! This is a bug!!!
-target_link_libraries(${MAIN} ${Boost_LIBRARIES})
-
-set(CONFIGURED_ONCE TRUE CACHE INTERNAL
-    "A flag showing that CMake has configured at least once.")
-
-# for boost testing ONLY
-find_package(Boost COMPONENTS 
-    program_options
     thread
     system
     chrono
     date_time
     REQUIRED)
 
+# SYSTEM arg tells compiler that the path contains system files. Compiler will thus ignore warning. 
+include_directories(SYSTEM ${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
+target_link_libraries(${MAIN} ${Boost_LIBRARIES})
+
+set(CONFIGURED_ONCE TRUE CACHE INTERNAL
+    "A flag showing that CMake has configured at least once.")
+
+# for boost testing ONLY
+
 add_executable(boosttest boosttest.cpp)
-target_link_libraries(boosttest ${Boost_LIBRARIES} -pthread)
+target_link_libraries(boosttest ${Boost_LIBRARIES})
 
 # ==== more libs ====
 option (USE_MYLIB "Use my optional lib" OFF)
