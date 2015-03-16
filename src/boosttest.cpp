@@ -14,6 +14,7 @@
   namespace po = boost::program_options;
 
 #include <boost/thread/shared_mutex.hpp>
+#include <boost/thread.hpp>
 
 int main(
     int    argc,
@@ -64,6 +65,8 @@ int main(
     vector<int> aaa {14, 13, 19, 22, 1};
     cout << aaa << endl;
 
+    boost::thread bth([]() { cout << "hello boost thread" << endl; });
+    bth.join();
 
     return 0;
 }

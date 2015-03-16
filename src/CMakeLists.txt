@@ -13,10 +13,9 @@ set(SOURCES
 add_executable(${MAIN} ${SOURCES})
 add_definitions(-std=c++11 -pthread)
 
-#find_package(Threads REQUIRED)
-#target_link_libraries(${MAIN} ${CMAKE_THREAD_LIBS_INIT})
-
-set(CMAKE_EXE_LINKER_FLAGS "-pthread")
+target_link_libraries(${MAIN} -pthread)
+# same effect:
+# set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pthread")
 
 # ==== boost ====
 if (NOT DEFINED     BOOST_ROOT        AND
@@ -44,25 +43,28 @@ endif()
 
 find_package(Boost COMPONENTS 
     program_options
-    thread 
-    system
-    chrono
-    date_time
     REQUIRED)
 
 # SYSTEM arg tells compiler that the path contains system files. Compiler will thus ignore warning. 
 include_directories(SYSTEM ${Boost_INCLUDE_DIR})
-
 link_directories(${Boost_LIBRARY_DIR})
+# NOTE: if link thread, then -pthread will be overwritten!!! This is a bug!!!
 target_link_libraries(${MAIN} ${Boost_LIBRARIES})
 
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL
     "A flag showing that CMake has configured at least once.")
 
 # for boost testing ONLY
-add_executable(boosttest boosttest.cpp)
-target_link_libraries(boosttest ${Boost_LIBRARIES})
+find_package(Boost COMPONENTS 
+    program_options
+    thread
+    system
+    chrono
+    date_time
+    REQUIRED)
 
+add_executable(boosttest boosttest.cpp)
+target_link_libraries(boosttest ${Boost_LIBRARIES} -pthread)
 
 # ==== more libs ====
 option (USE_MYLIB "Use my optional lib" OFF)
@@ -78,6 +80,7 @@ option (MY_INSTALLER OFF)
 if (MY_INSTALLER)
     install(TARGETS main DESTINATION ${PROJECT_BINARY_DIR})
 endif()
+
 
 # ==== testing ====
 enable_testing()

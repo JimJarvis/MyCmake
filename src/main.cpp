@@ -23,6 +23,5 @@ int main(int argc, char **argv)
             thvec.push_back(thread(hello, i));
         for_each(thvec.begin(), thvec.end(), mem_fn(&thread::join));
         cout << "hardware=" <<  thread::hardware_concurrency() << endl;
-
     }
 }
