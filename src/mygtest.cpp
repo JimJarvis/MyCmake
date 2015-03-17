@@ -8,8 +8,7 @@ int sq(int i) { return i * i; }
 
 TEST(MyTestSuite, Dudulu)
 {
-    EXPECT_EQ(1+2, 3) << "shitty";
-    EXPECT_EQ(1+2, 4) << "shitty";
+    EXPECT_EQ(1+2, 3) << "cooooo";
 }
 
 TEST(MyTestSuite, Async)
