@@ -45,8 +45,11 @@ endif()
 
 # ==== GTest ====
 include(eona_gtest)
+set(TEST_SUITE mygtest)
 
-add_gtest(mygtest mygtest.cpp)
+add_gtest(${TEST_SUITE} ${TEST_SUITE}.cpp)
+# so that you can run 'make gtest'
+add_custom_target(gtest COMMAND ${TEST_SUITE})
 
 # ==== CTest (cmake default) ====
 include(eona_ctest)
