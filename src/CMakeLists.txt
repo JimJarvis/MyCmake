@@ -77,8 +77,35 @@ if (MY_INSTALLER)
     install(TARGETS main DESTINATION ${PROJECT_BINARY_DIR})
 endif()
 
+# ==== GTest ====
+enable_testing()
+if (NOT DEFINED GTEST_ROOT)
+    if (APPLE OR UNIX)
+        set(GTEST_ROOT "/opt/gtest")
+    endif()
+endif()
 
-# ==== testing ====
+# Workaround OS-specific problems
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # force this option to ON so that Google Test will use /MD instead of /MT
+    # /MD is now the default for Visual Studio, so it should be our default, too
+    option(gtest_force_shared_crt
+        "Use shared (DLL) run-time lib even when Google Test is built as static lib."
+        ON)
+elseif (APPLE)
+    add_definitions(-DGTEST_USE_OWN_TR1_TUPLE=1)
+endif()
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+add_executable(mygtest mygtest.cpp)
+target_link_libraries(mygtest ${GTEST_BOTH_LIBRARIES})
+target_link_libraries(mygtest ${Boost_LIBRARYDIR})
+target_link_libraries(mygtest -pthread)
+add_test(MyGTests mygtest)
+
+
+# ==== CTest (cmake default) ====
 enable_testing()
 
 set(idx 0)
