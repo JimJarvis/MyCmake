@@ -1,5 +1,5 @@
-#include "myutils.h"
-#include "mythreads.h"
+#include "../src/myutils.h"
+#include "../src/mythreads.h"
 #include <gtest/gtest.h>
 #include <future>
 using namespace std;

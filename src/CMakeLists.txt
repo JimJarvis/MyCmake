@@ -45,11 +45,12 @@ endif()
 
 # ==== GTest ====
 include(eona_gtest)
-set(TEST_SUITE mygtest)
+#set(TEST_SUITE mygtest)
 
-add_gtest(${TEST_SUITE} ${TEST_SUITE}.cpp)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../test/ ${CMAKE_CURRENT_BINARY_DIR}/test)
+#add_gtest(${TEST_SUITE} ${TEST_SUITE}.cpp)
 # so that you can run 'make gtest'
-add_custom_target(gtest COMMAND ${TEST_SUITE})
+#add_custom_target(gtest COMMAND ${TEST_SUITE})
 
 # ==== CTest (cmake default) ====
 include(eona_ctest)
