@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 project(MyCmake CXX)
 
-message("Welcome to my fking template")
+# you can isolate CMake code out by adding a new dir to your src, and add a
+# new file MyXXX.cmake:
+# list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/mycmake)
+# include(myXXX)
+
+message("Welcome to Jim's template")
 
 set(MAIN
     main)
@@ -109,11 +114,19 @@ include_directories(${GTEST_INCLUDE_DIRS})
 # additional args can be accessed via ARG0, ARG1 ... ARGN
 function(add_gtest target)
     add_executable(${target} ${ARGN})
-    target_link_libraries(mygtest ${GTEST_BOTH_LIBRARIES})
-    target_link_libraries(mygtest ${Boost_LIBRARYDIR})
-    target_link_libraries(mygtest -pthread)
-    target_link_libraries(${target} gmock_main)
+    target_link_libraries(${target} ${GTEST_BOTH_LIBRARIES})
+    target_link_libraries(${target} ${Boost_LIBRARYDIR})
+    target_link_libraries(${target} -pthread)
+
     add_test(${target} ${target})
+
+    # run test after each time it's built
+    # Here we simply run the test and if it fails the build will stop. However if you were to build again immediately the failed test would not be run again and the build will continue. 
+    add_custom_command(TARGET ${target}
+        POST_BUILD
+        COMMAND ${target}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "My GTest running ${target}" VERBATIM)
 endfunction()
 
 add_gtest(mygtest mygtest.cpp)
