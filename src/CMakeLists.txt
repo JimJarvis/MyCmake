@@ -79,6 +79,7 @@ endif()
 
 # ==== GTest ====
 enable_testing()
+
 if (NOT DEFINED GTEST_ROOT)
     if (APPLE OR UNIX)
         set(GTEST_ROOT "/opt/gtest")
@@ -98,11 +99,24 @@ endif()
 
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
-add_executable(mygtest mygtest.cpp)
-target_link_libraries(mygtest ${GTEST_BOTH_LIBRARIES})
-target_link_libraries(mygtest ${Boost_LIBRARYDIR})
-target_link_libraries(mygtest -pthread)
-add_test(MyGTests mygtest)
+
+# add_gtest(<target> <sources>...)
+#
+#  Adds a GTest test executable, <target>, built from <sources> and
+#  adds the test so that CTest will run it. Both the executable and the test
+#  will be named <target>.
+#
+# additional args can be accessed via ARG0, ARG1 ... ARGN
+function(add_gtest target)
+    add_executable(${target} ${ARGN})
+    target_link_libraries(mygtest ${GTEST_BOTH_LIBRARIES})
+    target_link_libraries(mygtest ${Boost_LIBRARYDIR})
+    target_link_libraries(mygtest -pthread)
+    target_link_libraries(${target} gmock_main)
+    add_test(${target} ${target})
+endfunction()
+
+add_gtest(mygtest mygtest.cpp)
 
 
 # ==== CTest (cmake default) ====
