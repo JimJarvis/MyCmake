@@ -1,4 +1,5 @@
 enable_testing()
+add_definitions(-std=c++11 -pthread)
 
 if (NOT DEFINED GTEST_ROOT)
     if (APPLE OR UNIX)

@@ -1,3 +1,5 @@
+add_definitions(-std=c++11 -pthread)
+
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL
     "A flag showing that CMake has configured at least once.")
 
