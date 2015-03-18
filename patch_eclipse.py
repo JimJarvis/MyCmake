@@ -1,3 +1,8 @@
+#!/usr/bin/python
+#
+# Author: Jim Fan
+# Eona studio (c) 2015
+#
 # Eclipse will not index and highlight the source files correctly 
 # if the sources are split into separate directories. 
 # We can make the following modification:
