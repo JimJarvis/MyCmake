@@ -10,7 +10,10 @@ mkdir $BUILD_DIR
 cd $BUILD_DIR
 cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_CXX_COMPILER_ARG1=-std=c++11 -DCMAKE_BUILD_TYPE=Release ../cmake/
 cd ..
-python patch_eclipse.py $BUILD_DIR
+
+echo
+echo Patch eclipse project configurations:
+python patch_eclipse.py $BUILD_DIR GTest test
 
 echo
 echo DONE
