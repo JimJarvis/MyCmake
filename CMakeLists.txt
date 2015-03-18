@@ -11,7 +11,9 @@ message("Welcome to Jim's template")
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(eona_utils)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
+# CMAKE_CURRENT_BINARY_DIR: where generated cmake files go 
+# CMAKE_BINARY_DIR: top level of your build tree
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test 
     ${CMAKE_CURRENT_BINARY_DIR}/test)
