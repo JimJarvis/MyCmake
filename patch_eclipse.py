@@ -13,12 +13,21 @@
 from sys import argv, stderr
 import os
 
-if not 2 <= len(argv) <= 3:
-    print >> stderr, "Usage: python {} <eclipse_project_dir (cmake build dir)> [1 = add gtest folder]".format(argv[0])
+if not len(argv) >= 2:
+    print >> stderr, "Usage: python {} <eclipse_project_dir (cmake build dir)> [Eclipse_filter_title actual_dir_name pairs]\n".format(argv[0])
+    print >> stderr, "e.g. $ python {} ./build/ GTest test".format(argv[0])
+    print >> stderr, "To include directory 'test' as another source directory, and set its title to 'GTest' in Eclipse project explorer. "
     exit()
 
-addGtest = len(argv) == 3 and argv[-1] == '1'
 projpath = lambda f : os.path.join(argv[1], f)
+
+AddExplorerDict = {} # {GTest (title in eclipse explorer) : test (actual dir name)}
+
+arglen = len(argv)
+i = 2
+while i < arglen:
+    AddExplorerDict[argv[i]] = argv[i+1]
+    i += 2
 
 #================= correct .project file
 os.rename(projpath(".project"), projpath(".project_bak"))
@@ -51,10 +60,11 @@ while l:
             l = go()
 
         # now l == </linkedResources>, write <name>[GTest]</name> before end
-        if addGtest:
-            write("<link>\n<name>[Gtest]</name>\n<type>2</type>")
-            write("<location>"+os.path.join(absProjDir, "test")+"</location>")
+        for explorerTitle in AddExplorerDict:
+            write("<link>\n<name>[{}]</name>\n<type>2</type>".format(explorerTitle))
+            write("<location>"+os.path.join(absProjDir, AddExplorerDict[explorerTitle])+"</location>")
             write("</link>")
+
         write(l)  #</linkedResources>
         
     else:
@@ -83,7 +93,8 @@ while l:
         if not addOnce:
             addOnce = True
             # add [Gtest] as "src"
-            write('<pathentry kind="src" path="[Gtest]"/>')
+            for explorerTitle in AddExplorerDict:
+                write('<pathentry kind="src" path="[{}]"/>'.format(explorerTitle))
     else:
         write(l)
 
