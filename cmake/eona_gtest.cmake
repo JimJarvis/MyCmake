@@ -44,3 +44,13 @@ function(add_gtest target)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "My GTest running ${target}" VERBATIM)
 endfunction()
+
+# add_multiple_gtests(<target1> <target2> ...)
+# default source name: <target>.cpp
+# one target may only link to one source. 
+function(add_multiple_gtests target0)
+    set(targets ${target0} ${ARGN})
+    foreach(target IN ITEMS ${targets})
+        add_gtest(${target} ${target}.cpp)
+    endforeach()
+endfunction()
