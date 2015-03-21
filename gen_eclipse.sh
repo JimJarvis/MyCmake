@@ -10,12 +10,13 @@ fi
 
 if [ ! -d $BUILD_DIR ]; then
     mkdir $BUILD_DIR
-    cd $BUILD_DIR
-    cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_CXX_COMPILER_ARG1=-std=c++11 -DCMAKE_BUILD_TYPE=Release ../cmake/
-    cd ..
 else
     echo $BUILD_DIR already exists.
 fi
+
+cd $BUILD_DIR
+cmake -G "Eclipse CDT4 - Unix Makefiles" -DCMAKE_CXX_COMPILER_ARG1=-std=c++11 -DCMAKE_BUILD_TYPE=Release ../cmake/
+cd ..
 
 echo
 echo Patch eclipse project configurations:
