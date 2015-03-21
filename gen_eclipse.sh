@@ -2,6 +2,7 @@
 # arg1: give a build directory name. Defaults to 'project'
 
 BUILD_DIR=ubuntu
+USE_CUDA=1 # enable CUDA macros
 
 if [ $# -eq 1 ]; then
     BUILD_DIR=$1
@@ -18,7 +19,7 @@ fi
 
 echo
 echo Patch eclipse project configurations:
-python patch_eclipse.py $BUILD_DIR GTest test
+python patch_eclipse.py $BUILD_DIR $USE_CUDA GTest test
 
 echo
 echo DONE
