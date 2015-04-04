@@ -10,8 +10,8 @@ One way around Nsight is to move `test` folder into `src` and keep the top level
 
 `patch_eclipse_nvcc.py` should be run before `patch_eclipse.py`. It does the following:
 
-    1. Add `__NVCC__` macro definitions to `.cproject`
-    2. Add `nvcc.errorParser` to `.project`
+1. Add `__NVCC__` macro definitions to `.cproject`
+2. Add `nvcc.errorParser` to `.project`
 
 Even for eclipse 4.x, you will have to run `gen_eclipse.sh` again after rebuilding, though the indexer will not break. 
 
