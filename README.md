@@ -6,7 +6,12 @@ Run `python patch_eclipse.py` without any argument to show more help.
 
 Note that Nsight eclispe (3.x) indexer is so outdated that it doesn't support split source folder well. Every time you change CMakeLists.txt and rebuild, the patched file will break and the indexer will get confused and swamp the editor with false errors. 
 
-One way around Nsight is to move `test` folder into `src` and keep the top level CMakeLists.txt inside `src`. Please refer to project Cadenza's directory organization. Then you need to run `patch_eclipse_nvcc_macro.py` instead of `patch_eclipse.py`
+One way around Nsight is to move `test` folder into `src` and keep the top level CMakeLists.txt inside `src`. Please refer to project Cadenza's directory organization. Then you need to run `patch_eclipse_nvcc.py` instead of `patch_eclipse.py`
+
+`patch_eclipse_nvcc.py` should be run before `patch_eclipse.py`. It does the following:
+
+    1. Add `__NVCC__` macro definitions to `.cproject`
+    2. Add `nvcc.errorParser` to `.project`
 
 Even for eclipse 4.x, you will have to run `gen_eclipse.sh` again after rebuilding, though the indexer will not break. 
 
